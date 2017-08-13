@@ -68,19 +68,19 @@ try:
 
     # --- Check that unattended-upgrades is configured to install security updates.
     # '^\s*' Ensures that the line isn't commented out
-    expected_content_regex = r'^\s*' + re.escape(r'"${distro_id}:${distro_codename}-security";')
+    expected_content_regex = r'^\s*' + re.escape(r'"origin=Debian,codename=${distro_codename},label=Debian-Security";')
     config_filename = '/etc/apt/apt.conf.d/50unattended-upgrades'
     if not config_file_contains(config_filename, expected_content_regex):
         print("CRITICAL - 'unattended-upgrades' is not configured to install security updates")
         sys.exit(CRITICAL)
 
-    # --- Check that unattended-upgrades is configured to install recommended updates.
+    # --- Check that unattended-upgrades is configured to email.
     # '^\s*' Ensures that the line isn't commented out.
-    expected_content_regex = r'^\s*' + re.escape(r'"${distro_id}:${distro_codename}-updates";')
+    expected_content_regex = r'^\s*' + re.escape(r'Unattended-Upgrade::Mail "root";')
     config_filename = '/etc/apt/apt.conf.d/50unattended-upgrades'
     if not config_file_contains(config_filename, expected_content_regex):
-        print("WARNING - 'unattended-upgrades' is not configured to install recommended updates")
-        sys.exit(WARNING)
+        print("CRITICAL - 'unattended-upgrades' is not configured to email root")
+        sys.exit(CRITICAL)
 
     # --- Check that unattended-upgrades is configured to run.
     # This could be set up in "/etc/apt/apt.conf.d/10periodic" (deprecated) or in
@@ -93,8 +93,7 @@ try:
         re.escape(r'APT::Periodic::Unattended-Upgrade "') + r'(\d+)' + re.escape(r'";'),
         #
         r'APT::Periodic::Update-Package-Lists "(\d+)";',
-        r'APT::Periodic::Download-Upgradeable-Packages "(\d+)";',
-        r'APT::Periodic::AutocleanInterval "(\d+)";',
+        r'APT::Periodic::Unattended-Upgrade "(\d+)";',
     ]
     for cvr in config_variable_regexes:
         val = get_config_value(config_filename, cvr)
