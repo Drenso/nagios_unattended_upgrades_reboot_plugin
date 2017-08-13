@@ -59,13 +59,6 @@ def get_config_value(config_filename, config_value_regex):
 
 
 try:
-    # --- Check that 'update-notifier-common' is installed.
-    #    This isn't really necessary on Ubuntu machines, but will remind Debian users that this
-    #    package is necessary & other distro admins that they can't use this script.
-    if not package_installed('update-notifier-common'):
-        print("CRITICAL - Package 'update-notifier-common' missing.  This check is only for Ubuntu/Debian")
-        sys.exit(CRITICAL)
-
     # --- Check that 'unattended-upgrades' is installed.
     if not package_installed('unattended-upgrades'):
         print("CRITICAL - Package 'unattended-upgrades' not installed")
