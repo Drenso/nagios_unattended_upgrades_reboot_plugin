@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 from __future__ import unicode_literals, print_function
 import subprocess, sys, os, re
 
@@ -13,7 +13,7 @@ def package_installed(package_name):
         @return: True if \a package_name is installed, False if not.
     """
     # command output
-    co = subprocess.check_output('dpkg -l {pn} | grep {pn}'.format(pn=package_name), shell=True)
+    co = subprocess.check_output('dpkg -l {pn} | grep {pn}'.format(pn=package_name), shell=True).decode('utf-8')
     # search match
     m = re.search(package_name, co)
     ret = True if m else False
