@@ -77,7 +77,10 @@ try:
     # --- Check that unattended-upgrades is configured to email.
     # '^\s*' Ensures that the line isn't commented out.
     expected_content_regex = r'^\s*' + re.escape(r'Unattended-Upgrade::Mail "root";')
-    config_filename = '/etc/apt/apt.conf.d/50unattended-upgrades'
+    # can be managed by ansible in 90-ansible-unattended-upgrades
+    config_filename = '/etc/apt/apt.conf.d/90-ansible-unattended-upgrades'
+    if not os.path.isfile(config_filename):
+        config_filename = '/etc/apt/apt.conf.d/50unattended-upgrades'
     if not config_file_contains(config_filename, expected_content_regex):
         print("CRITICAL - 'unattended-upgrades' is not configured to email root")
         sys.exit(CRITICAL)
@@ -85,7 +88,10 @@ try:
     # --- Check that unattended-upgrades is configured to run.
     # This could be set up in "/etc/apt/apt.conf.d/10periodic" (deprecated) or in
     #    "/etc/apt/apt.conf.d/20unattended-upgrades".
-    config_filename = '/etc/apt/apt.conf.d/20auto-upgrades'
+    # Or managed by ansible in 90-ansible-unattended-upgrades
+    config_filename = '/etc/apt/apt.conf.d/90-ansible-unattended-upgrades'
+    if not os.path.isfile(config_filename):
+        config_filename = '/etc/apt/apt.conf.d/20auto-upgrades'
     if not os.path.isfile(config_filename):
         config_filename = '/etc/apt/apt.conf.d/10periodic'
     config_variable_regexes = [
