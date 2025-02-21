@@ -43,7 +43,7 @@ def get_config_value(config_filename, config_value_regex):
         @param config_value_regex: a regular expression which will match the config variable
             and it's value as the first group.
             Example: if a config variable looks like 'mysetting: <n>' config_value_regex would
-                be 'mysetting: (\d+)'
+                be 'mysetting: (\\d+)'
     """
     # config file object
     cf = open(config_filename, 'r')
