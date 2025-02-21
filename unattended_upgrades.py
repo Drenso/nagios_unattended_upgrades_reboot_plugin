@@ -115,7 +115,7 @@ try:
     reboot_required = os.path.exists('/var/run/reboot-required')
     if reboot_required:
         pkgs_path = '/var/run/reboot-required.pkgs'
-        pkgs = ': ' + ' '.join(open(pkgs_path).readlines()).strip() if os.path.exists(pkgs_path) else ''
+        pkgs = ': ' + ' '.join(open(pkgs_path,'r').read().splitlines()).strip() if os.path.exists(pkgs_path) else ''
         print("WARNING - Server requires a reboot" + pkgs)
         sys.exit(WARNING)
     else:
